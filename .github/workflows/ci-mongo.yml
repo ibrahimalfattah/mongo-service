@@ -1,0 +1,26 @@
+
+name: CI - Trigger Infra CD
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  trigger-cd:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Trigger Infra Repo CD
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.USR_TOKEN }}
+          repository: ibrahimalfattah/kub-advanced
+          event-type: deploy
+          client-payload: >
+            {
+              "service": "mongo",
+              "image": "mongo:latest"
+            }
